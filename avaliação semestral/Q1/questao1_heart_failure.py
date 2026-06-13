@@ -6,13 +6,10 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
-from ucimlrepo import fetch_ucirepo
 
 # ── 1. CARREGAMENTO ──────────────────────────────────────────────────────────
-dataset = fetch_ucirepo(id=519)
-df = dataset.data.original.copy()
+df = pd.read_csv('heart_failure_clinical_records_dataset.csv')
 print(df.head())
 print(df.dtypes)
 
@@ -28,8 +25,6 @@ numeric_cols = [c for c in df.columns if c not in binary_cols]
 
 print("Colunas numéricas contínuas:", numeric_cols)
 print("Colunas binárias (mantidas como 0/1):", binary_cols)
-
-X = df.drop(columns=[])  # usa tudo (DEATH_EVENT tratado como feature de grupo)
 
 # ── 3. JUSTIFICATIVA DO METAESTIMADOR ────────────────────────────────────────
 # KMeans: eficiente, interpretável, adequado para encontrar grupos naturais
@@ -54,6 +49,7 @@ k = 3
 kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
 df['cluster'] = kmeans.fit_predict(X_final)
 print("\nDistribuição dos clusters:\n", df['cluster'].value_counts())
+print("\nMédia por cluster:\n", df.groupby('cluster').mean().round(2))
 
 # ── 5. VISUALIZAÇÃO PCA ───────────────────────────────────────────────────────
 pca = PCA(n_components=2)

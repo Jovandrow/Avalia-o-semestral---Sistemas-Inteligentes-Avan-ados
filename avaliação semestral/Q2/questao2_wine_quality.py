@@ -2,7 +2,7 @@
 # Dataset: https://archive.ics.uci.edu/dataset/186/wine+quality
 
 import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -11,11 +11,8 @@ from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, Confusio
 import matplotlib.pyplot as plt
 
 # ── 1. CARREGAMENTO E MONTAGEM DO DATASET ────────────────────────────────────
-url_red   = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
-url_white = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"
-
-red   = pd.read_csv(url_red,   sep=';')
-white = pd.read_csv(url_white, sep=';')
+red   = pd.read_csv('winequality-red.csv',   sep=';')
+white = pd.read_csv('winequality-white.csv', sep=';')
 
 red['type']   = 0   # tinto
 white['type'] = 1   # branco
