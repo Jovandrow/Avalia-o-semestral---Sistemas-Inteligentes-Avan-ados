@@ -52,8 +52,8 @@ for nome, clf in modelos.items():
 melhor_nome = max(resultados, key=lambda n: resultados[n]['f1'])
 melhor      = resultados[melhor_nome]
 print(f"\n✔ Melhor modelo: {melhor_nome} (F1={melhor['f1']:.4f})")
-# Justificativa: maior F1-score ponderado indica melhor equilíbrio
-# entre precisão e recall em todas as classes de qualidade.
+# maior F1-score 
+
 
 # ── 5. MATRIZ DE CONFUSÃO DO MELHOR MODELO ───────────────────────────────────
 cm = confusion_matrix(y_test, melhor['pred'])
@@ -61,7 +61,7 @@ disp = ConfusionMatrixDisplay(cm, display_labels=sorted(y.unique()))
 disp.plot(cmap='Blues'); plt.title(f'Confusão — {melhor_nome}')
 plt.tight_layout(); plt.savefig('confusao_q2.png'); plt.close()
 
-# Acurácia por classe (via diagonal da matriz normalizada)
+# Acurácia por classe 
 cm_norm = cm.astype(float) / cm.sum(axis=1, keepdims=True)
 for i, cls in enumerate(sorted(y.unique())):
     print(f"  Acurácia classe {cls}: {cm_norm[i, i]:.4f}")

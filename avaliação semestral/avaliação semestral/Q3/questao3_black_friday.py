@@ -1,6 +1,5 @@
 # Questão 3 — Black Friday Sales (Multi-target: 3 classificadores)
 # Dataset: https://www.kaggle.com/datasets/noopurbhatt/retail-black-friday-sales-dataset
-# !! Baixe o CSV do Kaggle e ajuste o caminho em CSV_PATH !!
 
 import pandas as pd
 import numpy as np
@@ -12,7 +11,7 @@ from sklearn.metrics import (accuracy_score, f1_score,
                              confusion_matrix, ConfusionMatrixDisplay)
 import matplotlib.pyplot as plt
 
-CSV_PATH = "black_friday.csv"   # ← ajuste o caminho
+CSV_PATH = "retail_black_friday_sales_100k.csv"
 
 # ── 1. CARREGAMENTO ───────────────────────────────────────────────────────────
 df = pd.read_csv(CSV_PATH)
@@ -29,10 +28,9 @@ for col in df.select_dtypes(include='object').columns:
     df[col] = le.fit_transform(df[col].astype(str))
     le_map[col] = le
 
-# Alvos
 TARGETS = ['product_category', 'payment_method', 'age_group']
 
-# Features: todas as colunas que não são alvo
+# não são alvo
 FEATURES = [c for c in df.columns if c not in TARGETS]
 
 # ── 3. FUNÇÃO GENÉRICA DE TREINO + MÉTRICAS ───────────────────────────────────
@@ -95,6 +93,6 @@ def inferir(venda: dict):
         label = le_map[alvo].inverse_transform([pred])[0] if alvo in le_map else pred
         print(f"  {alvo:20s}: {label}  (certeza: {proba:.1%})")
 
-# Exemplo — preencha com valores reais do seu dataset
+
 venda_exemplo = {col: df[col].iloc[0] for col in FEATURES}
 inferir(venda_exemplo)

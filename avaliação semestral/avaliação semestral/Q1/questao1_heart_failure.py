@@ -14,25 +14,18 @@ print(df.head())
 print(df.dtypes)
 
 # ── 2. PRÉ-PROCESSAMENTO ─────────────────────────────────────────────────────
-# Sem duplicatas nem nulos
 df.drop_duplicates(inplace=True)
 df.dropna(inplace=True)
 
-# Colunas binárias já são 0/1; não precisam de encoding adicional.
-# Binárias: anaemia, diabetes, high_blood_pressure, sex, smoking, DEATH_EVENT
 binary_cols = ['anaemia', 'diabetes', 'high_blood_pressure', 'sex', 'smoking', 'DEATH_EVENT']
 numeric_cols = [c for c in df.columns if c not in binary_cols]
 
 print("Colunas numéricas contínuas:", numeric_cols)
 print("Colunas binárias (mantidas como 0/1):", binary_cols)
 
-# ── 3. JUSTIFICATIVA DO METAESTIMADOR ────────────────────────────────────────
-# KMeans: eficiente, interpretável, adequado para encontrar grupos naturais
-# em dados clínicos mistos (contínuos + binários já codificados).
-# Método do cotovelo define k ideal.
 
-# ── 4. PIPELINE ──────────────────────────────────────────────────────────────
-# Só as numéricas são escaladas; binárias entram direto após concat.
+# ── 3. PIPELINE ──────────────────────────────────────────────────────────────
+# Só as numéricas são escaladas; binárias entram direto 
 scaler = StandardScaler()
 X_num_scaled = scaler.fit_transform(df[numeric_cols])
 X_final = np.hstack([X_num_scaled, df[binary_cols].values])
@@ -51,7 +44,7 @@ df['cluster'] = kmeans.fit_predict(X_final)
 print("\nDistribuição dos clusters:\n", df['cluster'].value_counts())
 print("\nMédia por cluster:\n", df.groupby('cluster').mean().round(2))
 
-# ── 5. VISUALIZAÇÃO PCA ───────────────────────────────────────────────────────
+# ── 4. VISUALIZAÇÃO PCA ───────────────────────────────────────────────────────
 pca = PCA(n_components=2)
 coords = pca.fit_transform(X_final)
 plt.figure(figsize=(7, 5))
@@ -61,7 +54,7 @@ for c in range(k):
 plt.title('Clusters (PCA 2D)'); plt.legend(); plt.tight_layout()
 plt.savefig('clusters_q1.png'); plt.close()
 
-# ── 6. INFERÊNCIA ─────────────────────────────────────────────────────────────
+# ── 5. INFERÊNCIA ─────────────────────────────────────────────────────────────
 def inferir_cluster(paciente: dict):
     """
     paciente: dict com as mesmas colunas do dataset (sem 'cluster').
@@ -75,7 +68,7 @@ def inferir_cluster(paciente: dict):
     print(f"Paciente pertence ao Cluster {cluster}")
     return cluster
 
-# Exemplo de inferência com paciente fictício
+# Exemplo
 paciente_exemplo = {
     'age': 65, 'creatinine_phosphokinase': 582, 'ejection_fraction': 20,
     'platelets': 265000, 'serum_creatinine': 1.9, 'serum_sodium': 130,
